@@ -17,6 +17,8 @@ import com.w3engineers.ext.viper.application.data.remote.model.MeshPeer;
 import com.w3engineers.unicef.TeleMeshApplication;
 import com.w3engineers.unicef.telemesh.TeleMeshUser.RMDataModel;
 import com.w3engineers.unicef.telemesh.TeleMeshUser.RMUserModel;
+import com.w3engineers.unicef.telemesh.data.broadcast.BroadcastManager;
+import com.w3engineers.unicef.telemesh.data.broadcast.MessageBroadcastTask;
 import com.w3engineers.unicef.telemesh.data.helper.constants.Constants;
 
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class RightMeshDataSource extends BaseRmDataSource {
     private static RightMeshDataSource rightMeshDataSource;
 
     private List<String> userIds;
+    private BroadcastManager broadcastManager;
 
     protected RightMeshDataSource(byte[] profileInfo) {
         super(App.getContext(), profileInfo);
@@ -101,11 +104,10 @@ public class RightMeshDataSource extends BaseRmDataSource {
         return -1;
     }
 
-    /**
-     * Broadcast message to all live peers
-     * @param message
-     */
-    public int broadcastMessage(String message){
+
+    public int broadcastMessage(byte[] rawData){
+
+        broadcastManager = BroadcastManager.getInstance();
 
         List<BaseMeshData> livePeers =  getLivePeers();
 
@@ -114,16 +116,22 @@ public class RightMeshDataSource extends BaseRmDataSource {
         Log.e("Live Peers", "size:"+ size);
 
         for(int i=0; i< size; i++){
+
             MeshData meshData = new MeshData();
-            meshData.mType = Constants.DataType.BROADCAST_MESSAGE;
-            meshData.mData = message.getBytes();
+            // Since message feed will be broadcasted so here the type will be feed
+            meshData.mType = Constants.DataType.MESSAGE_FEED;
+            meshData.mData = rawData;
             meshData.mMeshPeer = livePeers.get(i).mMeshPeer;
 
-            try {
-                return sendMeshData(meshData);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+
+            MessageBroadcastTask messageBroadcastTask = new MessageBroadcastTask();
+            messageBroadcastTask.setMeshData(meshData);
+            messageBroadcastTask.setBaseRmDataSource(this);
+            messageBroadcastTask.setCustomThreadPoolManager(broadcastManager);
+
+            broadcastManager.addBroadCastMessage(messageBroadcastTask);
+
+
         }
 
         return -1;

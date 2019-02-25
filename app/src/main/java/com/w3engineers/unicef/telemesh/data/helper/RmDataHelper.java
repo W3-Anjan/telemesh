@@ -191,6 +191,11 @@ public class RmDataHelper {
             case Constants.DataType.MESSAGE_FEED:
                 // TODO include feed data operation module. i.e. DB operation and return a single insertion observer
                 break;
+
+            case Constants.DataType.BROADCAST_MESSAGE:
+                // This message is received from SP and it should be broadcast
+                rightMeshDataSource.broadcastMessage(rawData);
+                break;
         }
         return -1L;
     }
