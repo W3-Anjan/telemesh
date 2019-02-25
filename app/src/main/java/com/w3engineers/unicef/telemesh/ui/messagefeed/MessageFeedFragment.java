@@ -31,6 +31,9 @@ public class MessageFeedFragment extends BaseFragment {
         mMessageFeedViewModel = getViewModel();
         mMessageFeedBinding = (FragmentMessageFeedBinding) getViewDataBinding();
 
+
+        mMessageFeedViewModel.insertFeed();
+
     }
 
     private MessageFeedViewModel getViewModel() {

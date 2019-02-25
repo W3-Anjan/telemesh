@@ -2,6 +2,10 @@ package com.w3engineers.unicef.telemesh.ui.messagefeed;
 
 
 import com.w3engineers.ext.strom.application.ui.base.BaseRxViewModel;
+import com.w3engineers.unicef.telemesh.data.local.feed.FeedDataSource;
+import com.w3engineers.unicef.telemesh.data.local.feed.FeedEntity;
+
+import java.util.Date;
 
 /**
  * * ============================================================================
@@ -25,5 +29,25 @@ import com.w3engineers.ext.strom.application.ui.base.BaseRxViewModel;
  **/
 public class MessageFeedViewModel extends BaseRxViewModel {
 
+    private FeedDataSource mFeedDataSource;
 
+    public MessageFeedViewModel(FeedDataSource feedDataSource) {
+        this.mFeedDataSource = feedDataSource;
+    }
+
+
+
+    public void insertFeed(){
+
+        FeedEntity feedEntity = new FeedEntity();
+        feedEntity.setFeedId("0x34567");
+        feedEntity.setFeedProviderName("Unicef");
+        feedEntity.setFeedTitle("What is Lorem Ipsum?");
+        feedEntity.setFeedDetail("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+
+        feedEntity.setFeedTime(new Date());
+
+        mFeedDataSource.insertOrUpdateData(feedEntity);
+
+    }
 }

@@ -6,6 +6,7 @@ import com.w3engineers.ext.viper.application.data.BaseServiceLocator;
 import com.w3engineers.ext.viper.application.data.remote.BaseRmDataSource;
 import com.w3engineers.unicef.telemesh.data.helper.RmDataHelper;
 import com.w3engineers.unicef.telemesh.data.local.dbsource.Source;
+import com.w3engineers.unicef.telemesh.data.local.feed.FeedDataSource;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.MessageSourceData;
 import com.w3engineers.unicef.telemesh.data.local.usertable.UserDataSource;
 import com.w3engineers.unicef.telemesh.ui.aboutus.AboutUsViewModel;
@@ -84,7 +85,7 @@ public class ServiceLocator extends BaseServiceLocator {
     }
 
     public MessageFeedViewModel getMessageFeedViewModel() {
-        return new MessageFeedViewModel();
+        return new MessageFeedViewModel(FeedDataSource.getInstance());
     }
 
     public SurveyViewModel getSurveyViewModel() {

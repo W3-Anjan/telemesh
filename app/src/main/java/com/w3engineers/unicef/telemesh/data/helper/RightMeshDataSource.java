@@ -3,6 +3,7 @@ package com.w3engineers.unicef.telemesh.data.helper;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -14,7 +15,8 @@ import com.w3engineers.ext.viper.application.data.remote.model.MeshAcknowledgeme
 import com.w3engineers.ext.viper.application.data.remote.model.MeshData;
 import com.w3engineers.ext.viper.application.data.remote.model.MeshPeer;
 import com.w3engineers.unicef.TeleMeshApplication;
-import com.w3engineers.unicef.telemesh.TeleMeshUser.*;
+import com.w3engineers.unicef.telemesh.TeleMeshUser.RMDataModel;
+import com.w3engineers.unicef.telemesh.TeleMeshUser.RMUserModel;
 import com.w3engineers.unicef.telemesh.data.helper.constants.Constants;
 
 import java.util.ArrayList;
@@ -94,6 +96,34 @@ public class RightMeshDataSource extends BaseRmDataSource {
             return sendMeshData(meshData);
         } catch (RemoteException e) {
             e.printStackTrace();
+        }
+
+        return -1;
+    }
+
+    /**
+     * Broadcast message to all live peers
+     * @param message
+     */
+    public int broadcastMessage(String message){
+
+        List<BaseMeshData> livePeers =  getLivePeers();
+
+        int size = livePeers.size();
+
+        Log.e("Live Peers", "size:"+ size);
+
+        for(int i=0; i< size; i++){
+            MeshData meshData = new MeshData();
+            meshData.mType = Constants.DataType.BROADCAST_MESSAGE;
+            meshData.mData = message.getBytes();
+            meshData.mMeshPeer = livePeers.get(i).mMeshPeer;
+
+            try {
+                return sendMeshData(meshData);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
 
         return -1;

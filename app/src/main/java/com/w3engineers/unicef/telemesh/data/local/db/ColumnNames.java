@@ -56,4 +56,17 @@ public interface ColumnNames extends BaseColumnNames {
     String COLUMN_VENDOR_NAME = "vendor_name";
     String COLUMN_IS_SUBMITTED = "is_submitted";
     String COLUMN_SURVEY_ANS = "survey_answer";
+
+
+    /**
+     * Message Feed table column
+     */
+    String COLUMN_FEED_PROVIDER_NAME = "feed_provider_name";
+    String COLUMN_FEED_PROVIDER_LOGO = "feed_provider_logo";
+    String COLUMN_FEED_ID = "feed_id";
+    String COLUMN_FEED_TITLE = "feed_title";
+    String COLUMN_FEED_DETAIL = "feed_detail";
+    String COLUMN_FEED_TIME = "feed_time";
+    String COLUMN_FEED_READ_STATUS = "feed_read_status";
+
 }
