@@ -1,11 +1,18 @@
 package com.w3engineers.unicef.telemesh.ui.messagefeed;
 
 
+import android.widget.Toast;
+
 import com.w3engineers.ext.strom.application.ui.base.BaseRxViewModel;
+import com.w3engineers.unicef.TeleMeshApplication;
+import com.w3engineers.unicef.telemesh.data.helper.RightMeshDataSource;
 import com.w3engineers.unicef.telemesh.data.local.feed.FeedDataSource;
 import com.w3engineers.unicef.telemesh.data.local.feed.FeedEntity;
 
 import java.util.Date;
+
+import io.reactivex.MaybeObserver;
+import io.reactivex.disposables.Disposable;
 
 /**
  * * ============================================================================
@@ -33,6 +40,8 @@ public class MessageFeedViewModel extends BaseRxViewModel {
 
     public MessageFeedViewModel(FeedDataSource feedDataSource) {
         this.mFeedDataSource = feedDataSource;
+
+        getMayBeObserver();
     }
 
 
@@ -50,4 +59,38 @@ public class MessageFeedViewModel extends BaseRxViewModel {
         mFeedDataSource.insertOrUpdateData(feedEntity);
 
     }
+
+
+    public void broadcastMessageTest(){
+
+        byte [] msg = "HelloWorld".getBytes();
+        RightMeshDataSource.getRmDataSource().broadcastMessage(msg);
+    }
+
+    //receive broadcast message here by the Listener/observer
+    public MaybeObserver<String> getMayBeObserver(){
+
+        return new MaybeObserver<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(String s) {
+                Toast.makeText(TeleMeshApplication.getContext(), "Msg: " + s,  Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+    }
+
 }

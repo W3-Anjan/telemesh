@@ -3,6 +3,7 @@ package com.w3engineers.unicef.telemesh.data.local.dbsource;
 import com.w3engineers.unicef.telemesh.data.local.db.AppDatabase;
 import com.w3engineers.unicef.telemesh.data.local.db.DataSource;
 import com.w3engineers.unicef.telemesh.data.local.db.DbBaseEntity;
+import com.w3engineers.unicef.telemesh.data.local.feed.FeedDao;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.ChatEntity;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.MessageDao;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.MessageEntity;
@@ -11,6 +12,7 @@ import com.w3engineers.unicef.telemesh.data.local.usertable.UserDao;
 import com.w3engineers.unicef.telemesh.data.local.usertable.UserEntity;
 
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
@@ -41,10 +43,12 @@ public class Source implements DataSource {
 
     private MessageDao messageDao;
     private UserDao userDao;
+    private FeedDao feedDao;
 
     private Source() {
         messageDao = AppDatabase.getInstance().messageDao();
         userDao = AppDatabase.getInstance().userDao();
+        feedDao = AppDatabase.getInstance().feedDao();
     }
 
     public static Source getDbSource() {
@@ -97,4 +101,7 @@ public class Source implements DataSource {
     public void updateMessageStatus(String messageId, int messageStatus) {
            messageDao.updateMessageStatus(messageId, messageStatus);
     }
+
+
+
 }

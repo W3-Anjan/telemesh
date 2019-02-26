@@ -34,6 +34,8 @@ public class MessageFeedFragment extends BaseFragment {
 
         mMessageFeedViewModel.insertFeed();
 
+        mMessageFeedViewModel.broadcastMessageTest();
+
     }
 
     private MessageFeedViewModel getViewModel() {

@@ -1,7 +1,9 @@
 package com.w3engineers.unicef.telemesh.data.broadcast;
 
+import android.annotation.SuppressLint;
 import android.os.Message;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.w3engineers.ext.viper.application.data.remote.BaseRmDataSource;
 import com.w3engineers.ext.viper.application.data.remote.model.MeshData;
@@ -11,6 +13,7 @@ import java.util.concurrent.Callable;
 
 import io.left.rightmesh.android.AndroidMeshManager;
 import io.left.rightmesh.id.MeshId;
+import timber.log.Timber;
 
 /**
  Created by Anjan Debnath on 6/28/2018.
@@ -50,6 +53,7 @@ public class MessageBroadcastTask implements Callable {
 
 
 
+    @SuppressLint("TimberArgCount")
     @Override
     public Object call() {
         try {
@@ -61,6 +65,8 @@ public class MessageBroadcastTask implements Callable {
 
 
             try {
+                Timber.e("Live Peers", "message: sent");
+                   //Log.e("Live Peers", "message: sent");
                   sentStatus =  getBaseRmDataSource().sendMeshData(getMeshData());
             } catch (RemoteException e) {
                 e.printStackTrace();

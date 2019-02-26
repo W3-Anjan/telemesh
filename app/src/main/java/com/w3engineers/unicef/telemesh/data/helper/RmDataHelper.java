@@ -22,6 +22,10 @@ import com.w3engineers.unicef.util.helper.NotifyUtil;
 import com.w3engineers.unicef.util.helper.TimeUtil;
 
 import java.util.HashMap;
+
+import io.reactivex.Maybe;
+import io.reactivex.MaybeEmitter;
+import io.reactivex.MaybeOnSubscribe;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -190,6 +194,10 @@ public class RmDataHelper {
 
             case Constants.DataType.MESSAGE_FEED:
                 // TODO include feed data operation module. i.e. DB operation and return a single insertion observer
+
+                Log.e("Live Peers", "received: message");
+                setFeedMessage();
+
                 break;
 
             case Constants.DataType.BROADCAST_MESSAGE:
@@ -198,6 +206,21 @@ public class RmDataHelper {
                 break;
         }
         return -1L;
+    }
+
+
+    public Maybe<String> setFeedMessage(){
+
+        return Maybe.create(new MaybeOnSubscribe<String>() {
+            @Override
+            public void subscribe(MaybeEmitter<String> emitter) throws Exception {
+                if(!emitter.isDisposed()){
+                    emitter.onSuccess("Message received");
+                    Log.e("Live Peers", "emitted: message");
+                }
+            }
+        });
+
     }
 
     private long setChatMessage(byte[] rawChatData, String userId, boolean isNewMessage) {
