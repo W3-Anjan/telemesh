@@ -1,6 +1,5 @@
 package com.w3engineers.unicef.telemesh.data.helper;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.RemoteException;
 
@@ -14,7 +13,8 @@ import com.w3engineers.ext.viper.application.data.remote.model.MeshAcknowledgeme
 import com.w3engineers.ext.viper.application.data.remote.model.MeshData;
 import com.w3engineers.ext.viper.application.data.remote.model.MeshPeer;
 import com.w3engineers.unicef.TeleMeshApplication;
-import com.w3engineers.unicef.telemesh.TeleMeshUser.*;
+import com.w3engineers.unicef.telemesh.TeleMeshUser.RMDataModel;
+import com.w3engineers.unicef.telemesh.TeleMeshUser.RMUserModel;
 import com.w3engineers.unicef.telemesh.data.helper.constants.Constants;
 
 import java.util.ArrayList;
@@ -102,7 +102,6 @@ public class RightMeshDataSource extends BaseRmDataSource {
      * During receive a peer this time onPeer api is execute
      * @param profileInfo -> Got a peer data (profile information and meshId)
      */
-    @SuppressLint("TimberArgCount")
     @Override
     protected void onPeer(BaseMeshData profileInfo) {
 
@@ -122,7 +121,7 @@ public class RightMeshDataSource extends BaseRmDataSource {
                     RmDataHelper.getInstance().userAdd(rmUserModel.build());
                 }
             }
-        }catch (InvalidProtocolBufferException e) {
+        } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
         }
     }

@@ -10,7 +10,7 @@ import android.os.Process;
 import android.os.RemoteException;
 
 import com.w3engineers.ext.strom.App;
-import com.w3engineers.ext.strom.util.Utility;
+import com.w3engineers.ext.strom.util.helper.Utility;
 import com.w3engineers.ext.viper.IRmCommunicator;
 import com.w3engineers.ext.viper.IRmServiceConnection;
 import com.w3engineers.ext.viper.application.data.remote.model.BaseMeshData;

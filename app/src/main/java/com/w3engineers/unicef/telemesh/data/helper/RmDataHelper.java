@@ -2,15 +2,19 @@ package com.w3engineers.unicef.telemesh.data.helper;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.w3engineers.ext.strom.util.helper.data.local.SharedPref;
+import com.w3engineers.ext.strom.util.helper.Toaster;
+import com.w3engineers.ext.viper.application.data.remote.model.MeshData;
 import com.w3engineers.ext.viper.application.data.remote.model.MeshPeer;
 import com.w3engineers.unicef.TeleMeshApplication;
-import com.w3engineers.unicef.telemesh.TeleMeshChatOuterClass.*;
-import com.w3engineers.unicef.telemesh.TeleMeshUser.*;
+import com.w3engineers.unicef.telemesh.TeleMeshChatOuterClass.TeleMeshChat;
+import com.w3engineers.unicef.telemesh.TeleMeshUser.RMDataModel;
+import com.w3engineers.unicef.telemesh.TeleMeshUser.RMUserModel;
 import com.w3engineers.unicef.telemesh.data.helper.constants.Constants;
 import com.w3engineers.unicef.telemesh.data.local.db.DataSource;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.ChatEntity;
@@ -21,6 +25,7 @@ import com.w3engineers.unicef.util.helper.NotifyUtil;
 import com.w3engineers.unicef.util.helper.TimeUtil;
 
 import java.util.HashMap;
+
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -52,6 +57,7 @@ public class RmDataHelper {
 
     private HashMap<String, RMUserModel> rmUserMap;
     private HashMap<Integer, RMDataModel> rmDataMap;
+    private Handler mUiHandler;
 
     private RmDataHelper() {
         rmDataMap = new HashMap<>();
@@ -74,6 +80,7 @@ public class RmDataHelper {
                 .build();*/
 
         rightMeshDataSource = RightMeshDataSource.getRmDataSource();
+        mUiHandler = new Handler(Looper.getMainLooper());
 
         return rightMeshDataSource;
     }
@@ -183,6 +190,17 @@ public class RmDataHelper {
             case Constants.DataType.MESSAGE_FEED:
                 // TODO include feed data operation module. i.e. DB operation and return a single insertion observer
                 break;
+            default://Probable raw message from SuperPeer. Sent simple plain message. No Json or PB
+                mUiHandler.post(() -> {
+
+                    MeshData meshData = new MeshData();
+                    meshData.mType = (byte) dataType;
+                    meshData.mData = rawData;
+
+                    String st = new String(MeshData.getMeshData(meshData));
+                    Toaster.showShort(st);
+                });
+
         }
         return -1L;
     }

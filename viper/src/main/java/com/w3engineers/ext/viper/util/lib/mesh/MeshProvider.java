@@ -319,8 +319,8 @@ public class MeshProvider implements MeshStateListener {
 
             if (profileData == null) {//not profile data
 
-                Timber.d("Data received from::%s. Thread::%s", dataReceivedEvent.peerUuid,
-                        Thread.currentThread().getName());
+                Timber.d("Data received from::%s. Thread::%s Data::%s", dataReceivedEvent.peerUuid,
+                        Thread.currentThread().getName(), new String((dataReceivedEvent.data)));
                 meshData.mMeshPeer = MeshPeer.from(dataReceivedEvent.peerUuid);
                 mIMeshCallBack.onMesh(meshData);
 
