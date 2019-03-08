@@ -2,6 +2,7 @@ package com.w3engineers.ext.viper.util.lib.mesh;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.w3engineers.ext.viper.application.data.remote.model.BaseMeshData;
 import com.w3engineers.ext.viper.application.data.remote.model.MeshAcknowledgement;
@@ -144,7 +145,7 @@ public class MeshProvider implements MeshStateListener {
                 continue;//As no profile data yet available
             }
 
-            baseMeshData = new MeshData();
+            baseMeshData = new BaseMeshData();
 
             //init data
             baseMeshData.mMeshPeer = new MeshPeer(meshId);
@@ -308,6 +309,8 @@ public class MeshProvider implements MeshStateListener {
         MeshData meshData = MeshData.setMeshData(dataReceivedEvent.data);
 
         if(meshData != null) {
+
+            Log.e("meshData", meshData.mData.toString());
 
             //first check whether this is profile data or not
             //We would init switch case if more facility provides by framework (like file sending)

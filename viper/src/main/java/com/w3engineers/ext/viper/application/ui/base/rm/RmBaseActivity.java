@@ -31,7 +31,7 @@ import com.w3engineers.ext.viper.application.data.remote.BaseRmDataSource;
  * This is a base to adapt common tasks for RM at activity layer over the time
  * https://code.leftofthedot.com/azim/android-framework/issues/5
  */
-public abstract class RmBaseActivity extends BaseActivity {
+public abstract class RmBaseActivity extends BaseActivity{
 
     protected abstract BaseServiceLocator getServiceLocator();
 

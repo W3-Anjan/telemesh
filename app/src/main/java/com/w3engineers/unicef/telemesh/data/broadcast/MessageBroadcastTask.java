@@ -65,8 +65,7 @@ public class MessageBroadcastTask implements Callable {
 
 
             try {
-                Timber.e("Live Peers", "message: sent");
-                   //Log.e("Live Peers", "message: sent");
+                Log.e("Live Peers", "message: sent");
                   sentStatus =  getBaseRmDataSource().sendMeshData(getMeshData());
             } catch (RemoteException e) {
                 e.printStackTrace();

@@ -1,18 +1,24 @@
 package com.w3engineers.unicef.telemesh.ui.messagefeed;
 
 
+import android.arch.lifecycle.LiveData;
+import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.w3engineers.ext.strom.application.ui.base.BaseRxViewModel;
 import com.w3engineers.unicef.TeleMeshApplication;
+import com.w3engineers.unicef.telemesh.data.broadcast.UiThreadCallback;
 import com.w3engineers.unicef.telemesh.data.helper.RightMeshDataSource;
+import com.w3engineers.unicef.telemesh.data.helper.RmDataHelper;
 import com.w3engineers.unicef.telemesh.data.local.feed.FeedDataSource;
 import com.w3engineers.unicef.telemesh.data.local.feed.FeedEntity;
 
 import java.util.Date;
+import java.util.List;
 
-import io.reactivex.MaybeObserver;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * * ============================================================================
@@ -34,29 +40,13 @@ import io.reactivex.disposables.Disposable;
  * * --> <Second Reviewer> on [11-Oct-2018 at 12:28 PM].
  * * ============================================================================
  **/
-public class MessageFeedViewModel extends BaseRxViewModel {
+public class MessageFeedViewModel extends BaseRxViewModel{
 
     private FeedDataSource mFeedDataSource;
+    int count = 0;
 
     public MessageFeedViewModel(FeedDataSource feedDataSource) {
         this.mFeedDataSource = feedDataSource;
-
-        getMayBeObserver();
-    }
-
-
-
-    public void insertFeed(){
-
-        FeedEntity feedEntity = new FeedEntity();
-        feedEntity.setFeedId("0x34567");
-        feedEntity.setFeedProviderName("Unicef");
-        feedEntity.setFeedTitle("What is Lorem Ipsum?");
-        feedEntity.setFeedDetail("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
-
-        feedEntity.setFeedTime(new Date());
-
-        mFeedDataSource.insertOrUpdateData(feedEntity);
 
     }
 
@@ -64,33 +54,23 @@ public class MessageFeedViewModel extends BaseRxViewModel {
     public void broadcastMessageTest(){
 
         byte [] msg = "HelloWorld".getBytes();
-        RightMeshDataSource.getRmDataSource().broadcastMessage(msg);
+        //RightMeshDataSource.getRmDataSource().broadcastMessage(msg);
     }
 
-    //receive broadcast message here by the Listener/observer
-    public MaybeObserver<String> getMayBeObserver(){
 
-        return new MaybeObserver<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {
 
-            }
-
-            @Override
-            public void onSuccess(String s) {
-                Toast.makeText(TeleMeshApplication.getContext(), "Msg: " + s,  Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        };
+    public LiveData<List<FeedEntity>> getAllFeed() {
+        return mFeedDataSource.getAllFeed();
     }
+
+
+    /*private void onSuccessMine(String s){
+        count = count + 1;
+        Toast.makeText(TeleMeshApplication.getContext(), count+ "Msg: " + s,  Toast.LENGTH_LONG).show();
+    }
+
+    private void onError(Throwable e) {
+
+    }*/
 
 }

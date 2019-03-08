@@ -7,13 +7,17 @@ import android.util.Log;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.w3engineers.ext.strom.util.helper.data.local.SharedPref;
 import com.w3engineers.ext.viper.application.data.remote.model.MeshPeer;
 import com.w3engineers.unicef.TeleMeshApplication;
-import com.w3engineers.unicef.telemesh.TeleMeshChatOuterClass.*;
-import com.w3engineers.unicef.telemesh.TeleMeshUser.*;
+import com.w3engineers.unicef.telemesh.MessageFeedOuterClass;
+import com.w3engineers.unicef.telemesh.TeleMeshChatOuterClass.TeleMeshChat;
+import com.w3engineers.unicef.telemesh.TeleMeshUser.RMDataModel;
+import com.w3engineers.unicef.telemesh.TeleMeshUser.RMUserModel;
+import com.w3engineers.unicef.telemesh.data.broadcast.UiThreadCallback;
 import com.w3engineers.unicef.telemesh.data.helper.constants.Constants;
 import com.w3engineers.unicef.telemesh.data.local.db.DataSource;
+import com.w3engineers.unicef.telemesh.data.local.feed.FeedCallback;
+import com.w3engineers.unicef.telemesh.data.local.feed.FeedEntity;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.ChatEntity;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.MessageEntity;
 import com.w3engineers.unicef.telemesh.data.local.usertable.UserDataSource;
@@ -21,12 +25,13 @@ import com.w3engineers.unicef.telemesh.data.local.usertable.UserEntity;
 import com.w3engineers.unicef.util.helper.NotifyUtil;
 import com.w3engineers.unicef.util.helper.TimeUtil;
 
+import java.lang.ref.WeakReference;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
-import io.reactivex.Maybe;
-import io.reactivex.MaybeEmitter;
-import io.reactivex.MaybeOnSubscribe;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * * ============================================================================
@@ -48,7 +53,18 @@ import io.reactivex.schedulers.Schedulers;
  * * --> <Second Reviewer> on [22-Oct-2018 at 6:33 PM].
  * * ============================================================================
  **/
+
+
+/**
+ * RmDataHelper has the instance of both Source.java and RightMeshDataSource.java.
+ * RightMeshDataSource receive the raw data and that data is passed to RmDataHelper.
+ * Then RMDataHelper act as a converter and convert those raw data to specified Entity data that can be
+ * inserted into specific dao.
+ */
 public class RmDataHelper {
+
+
+
 
     private static RmDataHelper rmDataHelper = new RmDataHelper();
     private RightMeshDataSource rightMeshDataSource;
@@ -57,6 +73,11 @@ public class RmDataHelper {
 
     private HashMap<String, RMUserModel> rmUserMap;
     private HashMap<Integer, RMDataModel> rmDataMap;
+    //The reference is later used to communicate with the UI thread
+    private WeakReference<UiThreadCallback> uiThreadCallbackWeakReference;
+
+    private FeedCallback feedCallback;
+
 
     private RmDataHelper() {
         rmDataMap = new HashMap<>();
@@ -67,10 +88,18 @@ public class RmDataHelper {
         return rmDataHelper;
     }
 
-    public RightMeshDataSource initRM(DataSource dataSource) {
+
+    public void setUiThreadCallBack(UiThreadCallback uiThreadCallback){
+
+        this.uiThreadCallbackWeakReference = new WeakReference<UiThreadCallback>(uiThreadCallback);
+
+    }
+
+    public RightMeshDataSource initRM(DataSource dataSource, FeedCallback fCall) {
         Context context = TeleMeshApplication.getContext();
 
         this.dataSource = dataSource;
+        feedCallback = fCall;
 
        /* RMUserModel rmUserModel = RMUserModel.newBuilder()
                 .setUserFirstName(SharedPref.getSharedPref(context).read(Constants.preferenceKey.FIRST_NAME))
@@ -169,6 +198,18 @@ public class RmDataHelper {
         rmDataMap.put(dataSendId, rmDataModel);
     }
 
+    private String value;
+    private PublishSubject<String> subject = PublishSubject.create();
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+        subject.onNext(value);
+    }
+
     /**
      * During receive any data to from RM this API is manipulating data based on application
      *
@@ -195,13 +236,19 @@ public class RmDataHelper {
             case Constants.DataType.MESSAGE_FEED:
                 // TODO include feed data operation module. i.e. DB operation and return a single insertion observer
 
-                Log.e("Live Peers", "received: message");
-                setFeedMessage();
+                String feed_message = "Received from local :" + new String(rawData);
+                feedCallback.feedMessage(feed_message);
+                //setValue("Hello Anjan");
+                //setFeedMessage(rawData);
 
                 break;
 
             case Constants.DataType.BROADCAST_MESSAGE:
+            case 70:
                 // This message is received from SP and it should be broadcast
+                //setFeedMessage(rawData);
+                String br_message = "Received from Super peer : " + new String(rawData);
+                feedCallback.feedMessage(br_message);
                 rightMeshDataSource.broadcastMessage(rawData);
                 break;
         }
@@ -209,17 +256,39 @@ public class RmDataHelper {
     }
 
 
-    public Maybe<String> setFeedMessage(){
 
-        return Maybe.create(new MaybeOnSubscribe<String>() {
-            @Override
-            public void subscribe(MaybeEmitter<String> emitter) throws Exception {
-                if(!emitter.isDisposed()){
-                    emitter.onSuccess("Message received");
-                    Log.e("Live Peers", "emitted: message");
-                }
-            }
-        });
+
+
+    /*public Observable<String> getObservableMessage(){
+
+        setValue("Test");
+
+       Observable obs = subject;
+       return obs;
+
+    }*/
+
+
+    private long setFeedMessage(byte[] rawChatData){
+
+
+            String feed = new String(rawChatData);
+
+
+            final int min = 20;
+            final int max = 80;
+            final int random = new Random().nextInt((max - min) + 1) + min;
+
+            FeedEntity feedEntity = new FeedEntity();
+            feedEntity.setFeedId("0x34567"+ random);
+            feedEntity.setFeedProviderName("Unicef");
+            feedEntity.setFeedTitle(feed);
+            feedEntity.setFeedDetail("Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
+            feedEntity.setFeedTime(new Date());
+
+            return dataSource.insertOrUpdateData(feedEntity);
+
+
 
     }
 

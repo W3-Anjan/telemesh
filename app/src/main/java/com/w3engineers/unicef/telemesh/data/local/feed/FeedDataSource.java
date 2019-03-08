@@ -1,5 +1,6 @@
 package com.w3engineers.unicef.telemesh.data.local.feed;
 
+import android.arch.lifecycle.LiveData;
 import android.widget.Toast;
 
 import com.w3engineers.unicef.telemesh.data.local.db.AppDatabase;
@@ -46,7 +47,7 @@ public class FeedDataSource {
 
     }
 
-    public Flowable<List<FeedEntity>> getAllFeed() {
+    public LiveData<List<FeedEntity>> getAllFeed() {
         return feedDao.getAllFeed();
     }
 

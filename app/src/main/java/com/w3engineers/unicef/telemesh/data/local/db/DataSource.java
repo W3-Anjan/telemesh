@@ -26,6 +26,13 @@ import io.reactivex.Flowable;
  * * --> <Second Reviewer> on [22-Oct-2018 at 4:32 PM].
  * * ============================================================================
  **/
+
+
+/**
+ * This interface class is used to communicate with RmDataHelper and Source.
+ * Source class has all the dao instances.
+ * RMDataHelper will parse RM data and create related entity.
+ */
 public interface DataSource {
 
     /**
@@ -33,6 +40,8 @@ public interface DataSource {
      * @return
      */
     Flowable<ChatEntity> getLastChatData();
+
+
 
     long insertOrUpdateData(DbBaseEntity baseEntity);
 

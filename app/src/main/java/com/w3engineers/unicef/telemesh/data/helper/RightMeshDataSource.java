@@ -113,24 +113,27 @@ public class RightMeshDataSource extends BaseRmDataSource {
 
         int size = livePeers.size();
 
-        Log.e("Live Peers", "size:"+ size);
 
         for(int i=0; i< size; i++){
 
-            MeshData meshData = new MeshData();
-            // Since message feed will be broadcasted so here the type will be feed
-            meshData.mType = Constants.DataType.MESSAGE_FEED;
-            meshData.mData = rawData;
-            meshData.mMeshPeer = livePeers.get(i).mMeshPeer;
+            Log.e("Live Peers", "size:"+ size + " PeerId: "+livePeers.get(i).mMeshPeer.getPeerId());
+
+            if(livePeers.get(i).mMeshPeer.getPeerId()!= null){
+
+                MeshData meshData = new MeshData();
+                // Since message feed will be broadcasted so here the type will be feed
+                meshData.mType = Constants.DataType.MESSAGE_FEED;
+                meshData.mData = rawData;
+                meshData.mMeshPeer = livePeers.get(i).mMeshPeer;
 
 
-            MessageBroadcastTask messageBroadcastTask = new MessageBroadcastTask();
-            messageBroadcastTask.setMeshData(meshData);
-            messageBroadcastTask.setBaseRmDataSource(this);
-            messageBroadcastTask.setCustomThreadPoolManager(broadcastManager);
+                MessageBroadcastTask messageBroadcastTask = new MessageBroadcastTask();
+                messageBroadcastTask.setMeshData(meshData);
+                messageBroadcastTask.setBaseRmDataSource(this);
+                messageBroadcastTask.setCustomThreadPoolManager(broadcastManager);
 
-            broadcastManager.addBroadCastMessage(messageBroadcastTask);
-
+                broadcastManager.addBroadCastMessage(messageBroadcastTask);
+            }
 
         }
 
@@ -188,6 +191,7 @@ public class RightMeshDataSource extends BaseRmDataSource {
      */
     @Override
     protected void onData(MeshData meshData) {
+
 
         RMDataModel rmDataModel = RMDataModel.newBuilder()
                 .setUserMeshId(meshData.mMeshPeer.getPeerId())

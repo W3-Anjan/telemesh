@@ -1,5 +1,6 @@
 package com.w3engineers.unicef.telemesh.data.local.feed;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -20,5 +21,5 @@ public interface FeedDao extends BaseDao<FeedEntity> {
 
 
     @Query("SELECT * FROM " + TableNames.FEED)
-    Flowable<List<FeedEntity>> getAllFeed();
+    LiveData<List<FeedEntity>> getAllFeed();
 }

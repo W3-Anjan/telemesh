@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package com.w3engineers.unicef.telemesh;
+
+message Feed {
+    string messageText = 1;
+}
+
+message MessageFeed {
+
+    string feedId = 1;
+    string friendId = 2;
+    int32 messageType = 3;
+    int64 feedTime = 4;
+    int32 feedStatus = 5;
+
+    Feed feed = 6;
+}
