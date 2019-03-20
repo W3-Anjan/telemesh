@@ -1,6 +1,11 @@
 package com.w3engineers.unicef.telemesh.data.helper.constants;
 
+import android.os.Environment;
+
+import java.io.File;
+
 public class Constants {
+
 
     //bottom navigation item position
     public interface MenuItemPosition {
@@ -68,5 +73,11 @@ public class Constants {
     public interface UserStatus {
         int OFFLINE = 0;
         int ONLINE = 1;
+    }
+
+    public interface Directory {
+        String EXTERNAL_STORAGE_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+        String ROOT_DIRECTORY = EXTERNAL_STORAGE_DIRECTORY + "/TeleMesh/";
+        String FEED_PROVIDER_LOGO_DIRECTORY = EXTERNAL_STORAGE_DIRECTORY + "/TeleMesh/.feed_provide_logo/";
     }
 }

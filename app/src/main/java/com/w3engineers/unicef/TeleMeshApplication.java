@@ -38,7 +38,7 @@ public class TeleMeshApplication extends App {
 
         // Set app language based on user
         String language = SharedPref.getSharedPref(base).read(Constants.preferenceKey.APP_LANGUAGE);
-        if (language.equals("")){
+        if (language.equals("")) {
             language = DEFAULT_LANGUAGE;
         }
         LanguageUtil.setAppLanguage(base, language);

@@ -3,7 +3,11 @@ syntax = "proto3";
 package com.w3engineers.unicef.telemesh;
 
 message Feed {
-    string messageText = 1;
+
+    string messageProvider = 1;
+    string messageTitle = 2;
+    string messageDetails = 3;
+    string messageProviderLogo = 4;
 }
 
 message MessageFeed {

@@ -42,7 +42,7 @@ public class TimeUtil {
     private static String dateFormat8 = "yyyy";
     private static String dateFormat9 = "hh:mm aa";
     private static String dateFormat10 = "hh:mm";
-    private static String dateFormat11 = "MMMM dd, hh:mm aa";
+    private static String dateFormat11 = "dd MMM yyyy, hh:mm aa";
     private static String dateFormat12 = "dd MMM yyyy";
     private static String dateFormat13 = "dd-MM-yyyy";
 
@@ -53,14 +53,13 @@ public class TimeUtil {
     private TimeUtil() {
     }
 
-    public static TimeUtil getInstance(){
+    public static TimeUtil getInstance() {
 
-        if(timeUtil == null){
+        if (timeUtil == null) {
             timeUtil = new TimeUtil();
         }
         return timeUtil;
     }
-
 
 
     public static long toCurrentTime() {
@@ -168,10 +167,10 @@ public class TimeUtil {
 
         format.setTimeZone(TimeZone.getDefault());
 
-        return format.format(new Date(milliSeconds));
+        return format.format(new Date(milliSeconds)).toUpperCase();
     }
 
-     public static String getDayMonthYear(long milliSeconds) {
+    public static String getDayMonthYear(long milliSeconds) {
         DateFormat format = new SimpleDateFormat(dateFormat12, Locale.getDefault());
 
         format.setTimeZone(TimeZone.getDefault());
@@ -187,7 +186,7 @@ public class TimeUtil {
         return format.format(new Date(milliSeconds));
     }
 
-    public boolean isSameDay(Date date1, Date date2){
+    public boolean isSameDay(Date date1, Date date2) {
 
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -200,18 +199,18 @@ public class TimeUtil {
     }
 
 
-    public synchronized Date getDateFromMillisecond(long timeMillis){
+    public synchronized Date getDateFromMillisecond(long timeMillis) {
 
         DateFormat df = new SimpleDateFormat(dateFormat1, Locale.getDefault());
         Date formattedDate = null;
 
         df.setTimeZone(TimeZone.getDefault());
 
-        Date date =new Date(timeMillis);
+        Date date = new Date(timeMillis);
         String stringDate = df.format(date);
 
         try {
-              formattedDate = df.parse(stringDate);
+            formattedDate = df.parse(stringDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -220,10 +219,6 @@ public class TimeUtil {
         return formattedDate;
 
     }
-
-
-
-
 
 
 }

@@ -1,5 +1,6 @@
 package com.w3engineers.unicef.telemesh.data.local.db;
 
+import com.w3engineers.unicef.telemesh.data.local.feed.FeedEntity;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.ChatEntity;
 
 import java.util.List;
@@ -37,11 +38,10 @@ public interface DataSource {
 
     /**
      * Commonly used getLastData which is now inserted in DB
+     *
      * @return
      */
     Flowable<ChatEntity> getLastChatData();
-
-
 
     long insertOrUpdateData(DbBaseEntity baseEntity);
 

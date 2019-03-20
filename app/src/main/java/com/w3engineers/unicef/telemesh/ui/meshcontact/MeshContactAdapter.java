@@ -67,7 +67,6 @@ public class MeshContactAdapter extends BaseAdapter<UserEntity> {
     }
 
     public void resetWithList(List<UserEntity> items) {
-
         List<UserEntity> userEntities = getItems();
         userEntities.clear();
         notifyDataSetChanged();

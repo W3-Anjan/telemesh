@@ -4,6 +4,7 @@ import com.w3engineers.unicef.telemesh.data.local.db.AppDatabase;
 import com.w3engineers.unicef.telemesh.data.local.db.DataSource;
 import com.w3engineers.unicef.telemesh.data.local.db.DbBaseEntity;
 import com.w3engineers.unicef.telemesh.data.local.feed.FeedDao;
+import com.w3engineers.unicef.telemesh.data.local.feed.FeedDataSource;
 import com.w3engineers.unicef.telemesh.data.local.feed.FeedEntity;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.ChatEntity;
 import com.w3engineers.unicef.telemesh.data.local.messagetable.MessageDao;
@@ -13,7 +14,6 @@ import com.w3engineers.unicef.telemesh.data.local.usertable.UserDao;
 import com.w3engineers.unicef.telemesh.data.local.usertable.UserEntity;
 
 import io.reactivex.Flowable;
-import io.reactivex.Maybe;
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
@@ -61,9 +61,9 @@ public class Source implements DataSource {
         return MessageSourceData.getInstance().getLastData();
     }
 
+
     @Override
     public long insertOrUpdateData(DbBaseEntity baseEntity) {
-
         try {
 
             if (MessageEntity.class.isInstance(baseEntity)) {
@@ -72,7 +72,7 @@ public class Source implements DataSource {
             } else if (UserEntity.class.isInstance(baseEntity)) {
                 return userDao.insertOrUpdate((UserEntity) baseEntity);
 
-            } else if(FeedEntity.class.isInstance(baseEntity)){
+            } else if (FeedEntity.class.isInstance(baseEntity)) {
                 return feedDao.insertFeed((FeedEntity) baseEntity);
             }
 
@@ -104,9 +104,8 @@ public class Source implements DataSource {
 
     @Override
     public void updateMessageStatus(String messageId, int messageStatus) {
-           messageDao.updateMessageStatus(messageId, messageStatus);
+        messageDao.updateMessageStatus(messageId, messageStatus);
     }
-
 
 
 }

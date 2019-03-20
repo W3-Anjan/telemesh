@@ -17,7 +17,7 @@ public class ChatEntityListDataSource extends PositionalDataSource<ChatEntity> {
 
     private List<ChatEntity> chatList;
 
-    public ChatEntityListDataSource(List<ChatEntity> list){
+    public ChatEntityListDataSource(List<ChatEntity> list) {
         this.chatList = list;
 
     }
@@ -42,8 +42,9 @@ public class ChatEntityListDataSource extends PositionalDataSource<ChatEntity> {
 
     /**
      * Load initial list data.
-     *
+     * <p>
      * This method is called to load the initial page(s) from the DataSource.
+     *
      * @param params
      * @param callback
      */
@@ -58,9 +59,10 @@ public class ChatEntityListDataSource extends PositionalDataSource<ChatEntity> {
 
     /**
      * Called to load a range of data from the DataSource.
-     *
+     * <p>
      * This method is called to load additional pages from the DataSource
      * after the LoadInitialCallback passed to dispatchLoadInitial has initialized a PagedList.
+     *
      * @param params
      * @param callback
      */

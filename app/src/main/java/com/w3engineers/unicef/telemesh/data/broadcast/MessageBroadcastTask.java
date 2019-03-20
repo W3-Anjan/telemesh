@@ -16,9 +16,9 @@ import io.left.rightmesh.id.MeshId;
 import timber.log.Timber;
 
 /**
- Created by Anjan Debnath on 6/28/2018.
+ * Created by Anjan Debnath on 6/28/2018.
  * Copyright (c) 2018, W3 Engineers Ltd. All rights reserved..
- *
+ * <p>
  * MessageBroadcastTask is used for sending tasks to the thread pool. When a callable is submitted,
  * a Future object is returned, allowing the thread pool manager to stop the task.
  */
@@ -41,7 +41,6 @@ public class MessageBroadcastTask implements Callable {
     }
 
 
-
     public MeshData getMeshData() {
         return mMeshData;
     }
@@ -49,8 +48,6 @@ public class MessageBroadcastTask implements Callable {
     public void setMeshData(MeshData mMeshData) {
         this.mMeshData = mMeshData;
     }
-
-
 
 
     @SuppressLint("TimberArgCount")
@@ -63,10 +60,9 @@ public class MessageBroadcastTask implements Callable {
             if (Thread.interrupted()) throw new InterruptedException();
 
 
-
             try {
                 Log.e("Live Peers", "message: sent");
-                  sentStatus =  getBaseRmDataSource().sendMeshData(getMeshData());
+                sentStatus = getBaseRmDataSource().sendMeshData(getMeshData());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

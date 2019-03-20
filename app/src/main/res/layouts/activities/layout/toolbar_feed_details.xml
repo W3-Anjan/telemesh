@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.messagefeeddetails.MessageFeedDetailsActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.w3engineers.ext.strom.application.ui.base.BaseToolBar
+            android:id="@+id/toolbar_feed"
+            android:layout_width="0dp"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/white"
+            android:theme="@style/ToolbarTheme"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/title_color">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/text_view_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_40"
+                    android:layout_marginStart="@dimen/margin_5"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:ellipsize="end"
+                    android:ems="@integer/three_dot_ems"
+                    android:fontFamily="@font/poppins_regular"
+                    android:maxWidth="300dp"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/margin_5"
+                    android:text=""
+                    android:textColor="@color/select_photo_text_color"
+                    android:textSize="@dimen/text_size_18"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+        </com.w3engineers.ext.strom.application.ui.base.BaseToolBar>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

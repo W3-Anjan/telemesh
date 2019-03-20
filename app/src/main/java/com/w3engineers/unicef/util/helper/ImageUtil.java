@@ -15,18 +15,25 @@ package com.w3engineers.unicef.util.helper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.util.Base64;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.w3engineers.unicef.TeleMeshApplication;
 import com.w3engineers.unicef.telemesh.R;
+import com.w3engineers.unicef.telemesh.data.helper.constants.Constants;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,7 +130,101 @@ public class ImageUtil {
         return null;
     }
 
+    public String bitmapSave(String fileName, Bitmap bitmap) {
+
+        Bitmap compressedBitmap = processImageSize(bitmap);
+        return bitmapSaveFunctionality(compressedBitmap, fileName);
+    }
+
+    private Bitmap processImageSize(Bitmap bitmap) {
+
+        if (bitmap == null)
+            return null;
+
+        float imageHeight = 100;
+        float imageWidth = 100;
+
+        float width = bitmap.getWidth();
+        float height = bitmap.getHeight();
+
+        float scaleWidth = (width > imageWidth) ? imageWidth / width : 1;
+        float scaleHeight = (height > imageHeight) ? imageHeight / width : 1;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        return Bitmap.createBitmap(bitmap, 0, 0, (int) width, (int) height, matrix, false);
+
+    }
+
+
     private static RequestOptions getRequestOptions() {
-      return RequestOptions.skipMemoryCacheOf(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+        return RequestOptions.skipMemoryCacheOf(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+    }
+
+    private String bitmapSaveFunctionality(Bitmap imageBitmap, String fileName) {
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(fileName);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.flush();
+                    out.close();
+                }
+
+                return getBase64String(fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public String getBase64String(String imagePath) {
+
+        File imageFilePath = new File(imagePath);
+
+        if (!imageFilePath.exists()) return null;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        // Remove options from decode file during decode it is providing null bitmap
+        // Might be the low size image the options are optional for decoding image path
+        Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath.getAbsolutePath());
+        if (bitmap == null) return null;
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        if (byteArray != null) {
+            return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }
+        return null;
+    }
+
+    public void directoryChecker() {
+        File feedProviderLogoDir = new File(Constants.Directory.FEED_PROVIDER_LOGO_DIRECTORY);
+
+        if (feedProviderLogoDir.exists())
+            return;
+
+        File rootDirectory = new File(Constants.Directory.ROOT_DIRECTORY);
+
+        if (!rootDirectory.exists()) {
+            rootDirectory.mkdirs();
+        }
+        feedProviderLogoDir.mkdirs();
+    }
+
+    public String downloadImageFromUriAndSaveLocally(Uri uri, int height, int width, String fileName) {
+        directoryChecker();
+        Bitmap bitmap = getCenterCropBitmap(uri, width, height);
+        return bitmapSave(fileName, bitmap);
     }
 }

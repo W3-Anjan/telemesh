@@ -48,7 +48,6 @@ public class MeshContactViewModel extends BaseRxViewModel {
 
     public void openMessage(UserEntity userEntity) {
         openUserMessage.postValue(userEntity);
-
     }
 
     public int getUserAvatarByIndex(int imageIndex) {

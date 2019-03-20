@@ -50,24 +50,28 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
 
     /**
      * Called upon receiving any Peer data
+     *
      * @param profileInfo
      */
     protected abstract void onPeer(BaseMeshData profileInfo);
 
     /**
      * Calls upon disappearing of peers
+     *
      * @param meshPeer
      */
     protected abstract void onPeerGone(MeshPeer meshPeer);
 
     /**
      * Upon receiving any data from any peer
+     *
      * @param meshData
      */
     protected abstract void onData(MeshData meshData);
 
     /**
      * Upon receiving Data delivery acknowledgement
+     *
      * @param meshAcknowledgement
      */
     protected abstract void onAcknowledgement(MeshAcknowledgement meshAcknowledgement);
@@ -82,7 +86,7 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
     protected BaseRmDataSource(Context context, byte[] profileInfo) {
 
         //intentional hard string
-        if(context == null)
+        if (context == null)
             throw new NullPointerException("Context can not be null");
 
         mContext = context.getApplicationContext();
@@ -97,7 +101,7 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
 
         //Normally this should not be required but found in some devices service restarts upon
         // calling start service. e.g: Symphony ZVi
-        if(!Utility.isServiceRunning(context, BaseRmService.class)) {
+        if (!Utility.isServiceRunning(context, BaseRmService.class)) {
             context.startService(intent);
         }
         context.bindService(intent, mServiceConnection, Service.BIND_AUTO_CREATE);//check flag
@@ -141,6 +145,7 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
 
     /**
      * Retrieve peers which are live with their profile info
+     *
      * @return {@link List} of {@link BaseMeshData} which represents live peers in the network
      */
     public List<BaseMeshData> getLivePeers() {
@@ -158,6 +163,7 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
 
     /**
      * To check underlying service properly initiated or not
+     *
      * @return true if connected
      */
     public boolean isServiceConnected() {
@@ -167,18 +173,19 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
     /**
      * If service is not initiated properly then this method throws {@link IllegalStateException}.
      * Before using the method check service initiation through {@link #isServiceConnected()}
+     *
      * @param isForeGround
      */
     public void setServiceForeground(boolean isForeGround) {
 
-        if(mIRmServiceConnection == null) {
+        if (mIRmServiceConnection == null) {
             throw new IllegalStateException("Service not initiated properly");
         }
 
         try {
             mIRmServiceConnection.setServiceForeground(isForeGround);
 
-            if(mContext != null) {
+            if (mContext != null) {
 
                 if (isForeGround) {
                     mContext.unbindService(mServiceConnection);
@@ -198,13 +205,14 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
     /**
      * Send data through mesh library. Before calling you must be sure that service is active.
      * You can check that by whether {@link #onAttachedToService()} method is called or not.
+     *
      * @param meshData
      * @return
      * @throws RemoteException
      */
     public final int sendMeshData(MeshData meshData) throws RemoteException {
 
-        if(mIRmServiceConnection != null && meshData != null && meshData.mData != null &&
+        if (mIRmServiceConnection != null && meshData != null && meshData.mData != null &&
                 meshData.mType != ProfileManager.MY_PROFILE_INFO_TYPE) {
 
             return mIRmServiceConnection.sendMeshData(meshData);
@@ -249,7 +257,7 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
 
         //To kill RM library service, current app's local service and current app's process
         List<Integer> myProcessIdList = RmUtility.getMyProcessIdList(App.getContext());
-        for(int pid : myProcessIdList) {
+        for (int pid : myProcessIdList) {
             Process.killProcess(pid);
         }
         Process.killProcess(Process.myPid());
@@ -259,15 +267,19 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
 
     /**
      * Overridable method to receive the event of Library init
+     *
      * @throws RemoteException
      */
-    protected void onRmOn() { }
+    protected void onRmOn() {
+    }
 
     /**
      * Overridable method to receive the event of library destroy
+     *
      * @throws RemoteException
      */
-    protected void onRmOff() { }
+    protected void onRmOff() {
+    }
 
     /**
      * Convenient method so that developers can get the service attached event.
@@ -276,10 +288,11 @@ public abstract class BaseRmDataSource extends IRmCommunicator.Stub {
      * or heavy lifting then you should make sure that is happening only once within the lifecycle
      * or alternatively you can consider {@link #onRmOn()}
      */
-    protected void onAttachedToService() { }
+    protected void onAttachedToService() {
+    }
 
-    public void openRmSettings(){
-        if(mIRmServiceConnection != null){
+    public void openRmSettings() {
+        if (mIRmServiceConnection != null) {
             try {
                 mIRmServiceConnection.openRmSettings();
             } catch (RemoteException e) {

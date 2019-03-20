@@ -54,8 +54,11 @@ import com.w3engineers.unicef.telemesh.data.local.usertable.UserEntity;
 public abstract class AppDatabase extends BaseDatabase {
 
     public abstract UserDao userDao();
+
     public abstract MessageDao messageDao();
+
     public abstract SurveyDao surveyDao();
+
     public abstract FeedDao feedDao();
 
     public static AppDatabase getInstance() {

@@ -1,7 +1,6 @@
 package com.w3engineers.unicef.telemesh.data.provider;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.w3engineers.ext.viper.application.data.BaseServiceLocator;
 import com.w3engineers.ext.viper.application.data.remote.BaseRmDataSource;
@@ -10,7 +9,6 @@ import com.w3engineers.unicef.telemesh.data.local.dbsource.Source;
 import com.w3engineers.unicef.telemesh.data.local.feed.FeedCallBackToUI;
 import com.w3engineers.unicef.telemesh.data.local.feed.FeedCallback;
 import com.w3engineers.unicef.telemesh.data.local.feed.FeedDataSource;
-import com.w3engineers.unicef.telemesh.data.local.messagetable.MessageSourceData;
 import com.w3engineers.unicef.telemesh.data.local.usertable.UserDataSource;
 import com.w3engineers.unicef.telemesh.ui.aboutus.AboutUsViewModel;
 import com.w3engineers.unicef.telemesh.ui.buydata.BuyDataViewModel;
@@ -19,6 +17,7 @@ import com.w3engineers.unicef.telemesh.ui.createuser.CreateUserViewModel;
 import com.w3engineers.unicef.telemesh.ui.main.MainActivityViewModel;
 import com.w3engineers.unicef.telemesh.ui.meshcontact.MeshContactViewModel;
 import com.w3engineers.unicef.telemesh.ui.messagefeed.MessageFeedViewModel;
+import com.w3engineers.unicef.telemesh.ui.messagefeeddetails.MessageFeedDetailsViewModel;
 import com.w3engineers.unicef.telemesh.ui.mywallet.MyWalletViewModel;
 import com.w3engineers.unicef.telemesh.ui.selldata.SellDataViewModel;
 import com.w3engineers.unicef.telemesh.ui.settings.SettingsViewModel;
@@ -75,11 +74,11 @@ public class ServiceLocator extends BaseServiceLocator implements FeedCallback {
         return new CreateUserViewModel(application);
     }
 
-    public MainActivityViewModel getMainActivityViewModel(){
+    public MainActivityViewModel getMainActivityViewModel() {
         return new MainActivityViewModel();
     }
 
-    public SettingsViewModel getSettingsViewModel(Application application){
+    public SettingsViewModel getSettingsViewModel(Application application) {
         return new SettingsViewModel(application);
     }
 
@@ -92,11 +91,15 @@ public class ServiceLocator extends BaseServiceLocator implements FeedCallback {
         return new MessageFeedViewModel(FeedDataSource.getInstance());
     }
 
+    public MessageFeedDetailsViewModel getMessageFeedDetailsViewModel() {
+        return new MessageFeedDetailsViewModel(FeedDataSource.getInstance());
+    }
+
     public SurveyViewModel getSurveyViewModel() {
         return new SurveyViewModel();
     }
 
-    public ChatViewModel getChatViewModel(Application application){
+    public ChatViewModel getChatViewModel(Application application) {
         return new ChatViewModel(application);
     }
 
@@ -129,7 +132,7 @@ public class ServiceLocator extends BaseServiceLocator implements FeedCallback {
         feedCallBackToUI.sendToUi(message);
     }
 
-    public void setFeedCallBack(FeedCallBackToUI feedCallBackToUI){
-       this.feedCallBackToUI = feedCallBackToUI;
+    public void setFeedCallBack(FeedCallBackToUI feedCallBackToUI) {
+        this.feedCallBackToUI = feedCallBackToUI;
     }
 }

@@ -28,6 +28,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.internal.util.AppendOnlyLinkedArrayList;
 import io.reactivex.observers.DisposableObserver;
@@ -131,7 +132,6 @@ public class MeshContactsFragment extends BaseFragment {
             public void onNext(String string) {
                 Timber.d("Search query: " + string);
                 meshContactViewModel.startSearch(string, userEntityList);
-
             }
 
             @Override

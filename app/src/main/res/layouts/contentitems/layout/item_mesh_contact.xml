@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
-
         <import type="android.view.View" />
-
         <variable
             name="user"
             type="com.w3engineers.unicef.telemesh.data.local.usertable.UserEntity" />
-
         <variable
             name="contactViewModel"
             type="com.w3engineers.unicef.telemesh.ui.meshcontact.MeshContactViewModel" />
@@ -20,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> contactViewModel.openMessage(user)}">
-
         <View
             android:id="@+id/user_avatar_background"
             android:layout_width="@dimen/width_50"
@@ -59,8 +54,8 @@
             android:layout_marginBottom="@dimen/margin_10"
             android:text="@{user.userFirstName + ` ` + user.userLastName}"
             android:textColor="@color/black"
-            android:typeface='@{user.hasUnreadMessage > 0 ? "bold" : "normal"}'
             android:textSize="@dimen/text_size_18"
+            android:typeface='@{user.hasUnreadMessage > 0 ? "bold" : "normal"}'
             app:layout_constraintLeft_toRightOf="@id/user_avatar"
             app:layout_constraintRight_toLeftOf="@id/user_mesh_status"
             app:layout_constraintTop_toTopOf="parent" />

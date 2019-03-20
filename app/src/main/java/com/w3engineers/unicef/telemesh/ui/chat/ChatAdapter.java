@@ -93,7 +93,6 @@ public class ChatAdapter extends BaseAdapter<ChatEntity> {
 
         @Override
         public void bind(MessageEntity item) {
-
             binding.setTextMessage(item);
         }
 
